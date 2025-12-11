@@ -1,0 +1,15 @@
+# Fonts
+axes.titlesize: 7
+axes.labelsize: 7
+xtick.labelsize: 7
+ytick.labelsize: 7
+legend.fontsize: 6
+legend.labelspacing: 0.1
+
+# Linewidths
+axes.linewidth: 0.5
+xtick.major.width: 0.6
+ytick.major.width: 0.6
+xtick.minor.width: 0.35
+ytick.minor.width: 0.35
+

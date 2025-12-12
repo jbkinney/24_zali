@@ -1,0 +1,63 @@
+{
+  "A1-Out": {
+    "barcodes": ["ATACAACAGC", "CGACTAGGT"],
+    "skip_length": 24,
+    "extract_length": 90
+  },
+  "A1-1W": {
+    "barcodes": ["ACATATCGAC", "GTCGATGTG"],
+    "skip_length": 24,
+    "extract_length": 90
+  },
+  "A1-3W": {
+    "barcodes": ["AACTAAGCCT", "CGGATTCAG"],
+    "skip_length": 24,
+    "extract_length": 90
+  },
+  "A2-Out": {
+    "barcodes": ["TAAGTGGCGC", "ATGCTCAGTA"],
+    "skip_length": 24,
+    "extract_length": 90
+  },
+  "A2-1W": {
+    "barcodes": ["TGACGGTC", "ATGGTAC"],
+    "skip_length": 24,
+    "extract_length": 90
+  },
+  "A2-3W": {
+    "barcodes": ["TACGATCG", "CCTAATG"],
+    "skip_length": 24,
+    "extract_length": 90
+  },
+  "C1-OUT": {
+    "barcodes": ["CCATGCCAC", "AAGCATCA"],
+    "skip_length": 19,
+    "extract_length": 90
+  },
+  "C1-1W": {
+    "barcodes": ["TATTGCAATC", "CACCACGAT"],
+    "skip_length": 19,
+    "extract_length": 90
+  },
+  "C1-3W": {
+    "barcodes": ["GTACATCCTT", "ACTTGGTTG"],
+    "skip_length": 19,
+    "extract_length": 90
+  },
+  "C2-OUT": {
+    "barcodes": ["TCATGTGA", "CAATTGG"],
+    "skip_length": 19,
+    "extract_length": 90
+  },
+  "C2-1W": {
+    "barcodes": ["TTGTAGGC", "AACTGAC"],
+    "skip_length": 19,
+    "extract_length": 90
+  },
+  "C2-3W": {
+    "barcodes": ["GCAGTTAG", "TCCATCCTG"],
+    "skip_length": 19,
+    "extract_length": 90
+  }
+}
+

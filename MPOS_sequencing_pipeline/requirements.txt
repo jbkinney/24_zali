@@ -1,0 +1,11 @@
+# Requirements for sequencing data processing pipeline
+
+# Snakemake (for automated workflow)
+snakemake>=7.0.0
+
+# PyYAML (required for shell script workflow)
+pyyaml>=5.0
+
+# Python standard library is sufficient for basic functionality
+# No additional Python packages required beyond what's listed above
+

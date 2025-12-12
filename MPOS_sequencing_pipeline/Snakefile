@@ -1,0 +1,129 @@
+"""
+Snakemake workflow for processing sequencing data from FASTQ files to count tables.
+
+This workflow automates the following steps:
+1. Extract sequences from FASTQ files (R1 and R2)
+2. Match sequences with barcodes and extract target sequences
+3. Count occurrences of each unique sequence per sample
+4. Merge all count files into a single count table
+
+IMPORTANT: The counts represent whole fragment/molecule counts. Each R1 read 
+corresponds to one DNA fragment, so the final counts represent the number of 
+unique fragments matching each library sequence in each condition.
+"""
+
+import os
+import json
+from pathlib import Path
+
+# Load configuration
+configfile: "config.yaml"
+
+# Get list of sequencing runs
+SEQUENCING_RUNS = config["sequencing_runs"]
+
+# Load barcode configs for each run
+BARCODE_CONFIGS = {}
+for run in SEQUENCING_RUNS:
+    with open(run["barcode_config"], 'r') as f:
+        BARCODE_CONFIGS[run["name"]] = json.load(f)
+
+# Define directories
+SEQ_DIR = "sequences"
+SEQS_BY_SAMPLE_DIR = "seqs_by_sample"
+COUNTS_DIR = "Counts_seqs_by_sample"
+RESULTS_DIR = "results"
+
+# Collect all final outputs
+FINAL_OUTPUTS = [f"{RESULTS_DIR}/{run['name']}.txt" for run in SEQUENCING_RUNS]
+
+# Rule to create directories
+rule all:
+    input:
+        final_tables = FINAL_OUTPUTS
+    message: "Processing complete. Final count tables: {input.final_tables}"
+
+# Extract sequences from FASTQ R1 file
+rule extract_sequences_r1:
+    input:
+        fastq = lambda wildcards: next(run["fastq_r1"] for run in SEQUENCING_RUNS if run["name"] == wildcards.run_name)
+    output:
+        seq_file = f"{SEQ_DIR}/{{run_name}}_R1.txt"
+    shell:
+        """
+        mkdir -p {SEQ_DIR}
+        awk 'NR % 4 == 2' {input.fastq} > {output.seq_file}
+        """
+
+# Extract sequences from FASTQ R2 file
+rule extract_sequences_r2:
+    input:
+        fastq = lambda wildcards: next(run["fastq_r2"] for run in SEQUENCING_RUNS if run["name"] == wildcards.run_name)
+    output:
+        seq_file = f"{SEQ_DIR}/{{run_name}}_R2.txt"
+    shell:
+        """
+        mkdir -p {SEQ_DIR}
+        awk 'NR % 4 == 2' {input.fastq} > {output.seq_file}
+        """
+
+# Match barcodes and extract sequences for each sample
+rule match_barcodes:
+    input:
+        seq_file = f"{SEQ_DIR}/{{run_name}}_R1.txt"
+    output:
+        sample_file = f"{SEQS_BY_SAMPLE_DIR}/{{run_name}}_{{sample}}.txt"
+    params:
+        barcodes = lambda wildcards: '|'.join(BARCODE_CONFIGS[wildcards.run_name][wildcards.sample]["barcodes"]),
+        skip_length = lambda wildcards: BARCODE_CONFIGS[wildcards.run_name][wildcards.sample]["skip_length"],
+        extract_length = lambda wildcards: BARCODE_CONFIGS[wildcards.run_name][wildcards.sample]["extract_length"]
+    shell:
+        """
+        mkdir -p {SEQS_BY_SAMPLE_DIR}
+        # Extract sequences matching barcodes and extract target sequence
+        grep -E '^{params.barcodes}' {input.seq_file} | \
+        sed -E 's/^({params.barcodes}).{{{params.skip_length}}}(.{{{params.extract_length}}}).*/\\2/' > {output.sample_file}
+        """
+
+# Count sequences for each sample
+rule count_sequences:
+    input:
+        sample_file = f"{SEQS_BY_SAMPLE_DIR}/{{run_name}}_{{sample}}.txt"
+    output:
+        count_file = f"{COUNTS_DIR}/Counts_{{run_name}}_{{sample}}.txt"
+    shell:
+        """
+        mkdir -p {COUNTS_DIR}
+        awk '{{ count[$0]++ }} END {{ for (line in count) print count[line], line }}' {input.sample_file} | \
+        sort -nr > {output.count_file}
+        """
+
+# Merge all count files for a sequencing run into final table
+rule merge_counts:
+    input:
+        count_files = lambda wildcards: expand(
+            f"{COUNTS_DIR}/Counts_{{{wildcards.run_name}}}_{{sample}}.txt",
+            sample=list(BARCODE_CONFIGS[wildcards.run_name].keys())
+        )
+    output:
+        final_table = f"{RESULTS_DIR}/{{run_name}}.txt"
+    shell:
+        """
+        mkdir -p {RESULTS_DIR}
+        # Start with first file (sorted by count, descending)
+        FIRST_FILE=$(echo {input.count_files} | awk '{{print $1}}')
+        sort -k2 "$FIRST_FILE" > {RESULTS_DIR}/temp_sorted.txt
+        
+        # Merge remaining files one by one
+        for file in {input.count_files}; do
+            if [ "$file" != "$FIRST_FILE" ]; then
+                sort -k2 "$file" > {RESULTS_DIR}/temp_current.txt
+                join -a1 -a2 -e 0 -o auto -1 1 -2 2 {RESULTS_DIR}/temp_sorted.txt {RESULTS_DIR}/temp_current.txt > {RESULTS_DIR}/temp_merged.txt
+                mv {RESULTS_DIR}/temp_merged.txt {RESULTS_DIR}/temp_sorted.txt
+            fi
+        done
+        
+        # Rename final file
+        mv {RESULTS_DIR}/temp_sorted.txt {output.final_table}
+        rm -f {RESULTS_DIR}/temp_current.txt
+        """

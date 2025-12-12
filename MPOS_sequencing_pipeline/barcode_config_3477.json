@@ -1,0 +1,53 @@
+{
+  "A1before_yl": {
+    "barcodes": ["ATACAACAGC", "CGACTAGGT"],
+    "skip_length": 24,
+    "extract_length": 90
+  },
+  "A1_plate_yl-0n": {
+    "barcodes": ["ACATATCGAC", "GTCGATGTG"],
+    "skip_length": 24,
+    "extract_length": 90
+  },
+  "A1_3d_yl": {
+    "barcodes": ["AACTAAGCCT", "CGGATTCAG"],
+    "skip_length": 24,
+    "extract_length": 90
+  },
+  "A1_4d_yl": {
+    "barcodes": ["CCAGCGCT", "GACGTCA"],
+    "skip_length": 24,
+    "extract_length": 90
+  },
+  "C1-out": {
+    "barcodes": ["CCATGCCAC"],
+    "skip_length": 19,
+    "extract_length": 90
+  },
+  "C1-P": {
+    "barcodes": ["TATTGCAATC"],
+    "skip_length": 19,
+    "extract_length": 90
+  },
+  "C1-4d": {
+    "barcodes": ["ATTGCAGG"],
+    "skip_length": 19,
+    "extract_length": 90
+  },
+  "C2-out": {
+    "barcodes": ["TCATGTGA"],
+    "skip_length": 19,
+    "extract_length": 90
+  },
+  "c2-P": {
+    "barcodes": ["TTGTAGGC"],
+    "skip_length": 19,
+    "extract_length": 90
+  },
+  "c2-4d": {
+    "barcodes": ["TGGCGCAT"],
+    "skip_length": 19,
+    "extract_length": 90
+  }
+}
+

@@ -1,0 +1,23 @@
+﻿Sequencing run,Name of sample,Library,Replicate,Timepoint,Number of raw reads,Number of reads matching ORI A library members,Number of reads matching ORI C library members
+NGS-NZ-3454,A1-1W,A,1,Plate (1 wash),9192040,863082,1
+NGS-NZ-3454,A1-3W,A,1,Plate (3 washes),8156913,888233,25
+NGS-NZ-3454,A1-Out,A,1,Input,12911711,1783399,4
+NGS-NZ-3454,A2-1W,A,2,Plate (1 wash),5760,70,0
+NGS-NZ-3454,A2-3W,A,2,Plate (3 washes),8578056,3506017,8
+NGS-NZ-3454,A2-Out,A,2,Input,9663810,5111615,6
+NGS-NZ-3454,C1-1W,C,1,Plate (1 wash),7771391,116,6536271
+NGS-NZ-3454,C1-3W,C,1,Plate (3 washes),32484048,64,26300016
+NGS-NZ-3454,C1-OUT,C,1,Input,5148934,2,4159606
+NGS-NZ-3454,C2-1W,C,2,Plate (1 wash),3628,0,66
+NGS-NZ-3454,C2-3W,C,2,Plate (3 washes),15,0,4
+NGS-NZ-3454,C2-OUT,C,2,Input,98467,0,78304
+NGS-NZ-3477,A1_3d_yl,A,1,3 day (liquid culture),14724058,4229971,39
+NGS-NZ-3477,A1_4d_yl,A,1,4 day (liquid culture),5832185,11156,7
+NGS-NZ-3477,A1before_yl,A,1,Input,13046222,2911260,4
+NGS-NZ-3477,A1_plate_yl-0n,A,1,Plate,9490327,2082266,6
+NGS-NZ-3477,C1-4d,C,1,4 day (liquid culture),6025726,387,4619393
+NGS-NZ-3477,C1-out,C,1,Input,8363094,1,7028247
+NGS-NZ-3477,C1-P,C,1,Plate,10401779,20,8573434
+NGS-NZ-3477,c2-4d,C,2,4 day (liquid culture),10260959,46,8792489
+NGS-NZ-3477,C2-out,C,2,Input,10283170,3,8820054
+NGS-NZ-3477,c2-P,C,2,Plate,8517661,8,7264362

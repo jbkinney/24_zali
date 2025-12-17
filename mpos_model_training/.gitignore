@@ -1,0 +1,54 @@
+# Output files
+output/
+outputbash/
+*.pickle
+*.h5
+*.png
+*.log
+
+# Data files (too large for GitHub - users must provide their own)
+data/*.txt
+data/*.csv
+data/*.tsv
+# Keep the data directory structure
+!data/.gitkeep
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+
+# Environment
+venv/
+env/
+ENV/
+.venv
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+
+# Temporary files
+*.tmp
+*.temp
+

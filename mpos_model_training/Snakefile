@@ -1,0 +1,75 @@
+"""
+Snakemake workflow for training MAVE-NN models on MPOS data.
+
+This workflow trains models one at a time using a shell script.
+The script can resume from where it left off if interrupted.
+"""
+
+import os
+import yaml
+
+# Load configuration
+configfile: "config/training_config.yaml"
+
+# Define output directory
+OUTPUT_DIR = config["output_dir"]
+DATA_DIR = config["data_dir"]
+
+# Get all model configurations
+with open("config/training_config.yaml", 'r') as f:
+    config_data = yaml.safe_load(f)
+
+# Generate list of all model outputs
+model_outputs = []
+for model_config in config_data['models']:
+    if model_config.get('fit_model', True):
+        readcount_file = os.path.basename(model_config['readcount_file'])
+        run_name = readcount_file.split(".")[0]
+        fit_samples = model_config.get('fit_samples', [])
+        
+        for sample_set in fit_samples:
+            sample_set_name = f"{run_name}_{'_'.join(sample_set)}"
+            model_outputs.extend([
+                f"{OUTPUT_DIR}/{sample_set_name}.pickle",
+                f"{OUTPUT_DIR}/{sample_set_name}.weights.h5",
+                f"{OUTPUT_DIR}/{sample_set_name}_logo.png",
+                f"{OUTPUT_DIR}/{sample_set_name}_zipf_plots.png",
+                f"{OUTPUT_DIR}/{sample_set_name}_training_history.png",
+                f"{OUTPUT_DIR}/{sample_set_name}_measurement_process.png"
+            ])
+
+rule all:
+    input:
+        model_outputs
+
+# Collect all unique data files
+data_files = set()
+for model_config in config_data['models']:
+    if model_config.get('fit_model', True):
+        data_files.add(model_config['readcount_file'])
+        data_files.add(model_config['library_seqs_file'])
+
+rule train_all_models:
+    """
+    Train all models one at a time using a shell script wrapper.
+    The script will skip models that are already completed and can resume from failures.
+    """
+    input:
+        config="config/training_config.yaml",
+        script="scripts/train_all_models.sh",
+        train_script="scripts/train_model_by_index.py",
+        main_script="scripts/train_mpos_models.py",
+        # Include all data files as dependencies
+        data_files=list(data_files)
+    output:
+        # All model files
+        model_files=model_outputs
+    params:
+        output_dir=OUTPUT_DIR
+    log:
+        f"{OUTPUT_DIR}/all_models_training.log"
+    shell:
+        """
+        mkdir -p {params.output_dir}/log
+        bash {input.script} {input.config} {params.output_dir} > {log} 2>&1
+        """

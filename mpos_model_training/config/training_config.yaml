@@ -1,0 +1,119 @@
+# Configuration file for MPOS model training workflow
+
+# Output directory for results
+output_dir: "output"
+
+# Data directory (relative to workflow root)
+data_dir: "data"
+
+# Model training configurations
+models:
+  # ORI A models for NGS-NZ-3454
+  - name: "ORI_A_3454"
+    readcount_file: "data/NGS-NZ-3454.txt"
+    library_seqs_file: "data/ORI_A_library_2024-06-13_13_22_23.012484.csv"
+    all_samples:
+      - "A1-1W"
+      - "A1-3W"
+      - "A1-Out"
+      - "A2-1W"
+      - "A2-3W"
+      - "A2-Out"
+      - "C1-1W"
+      - "C1-3W"
+      - "C1-OUT"
+      - "C2-1W"
+      - "C2-3W"
+      - "C2-OUT"
+    adapter_lengths: [21, 19]
+    zipf_figure_shape: [2, 3]
+    fit_samples:
+      - ["A1-1W", "A1-Out"]
+      - ["A1-3W", "A1-Out"]
+      - ["A2-3W", "A2-Out"]
+    fit_model: true
+    sign_flips: [true, false, true]
+    reverse_complement: true
+
+  # ORI A models for NGS-NZ-3477
+  - name: "ORI_A_3477"
+    readcount_file: "data/NGS-NZ-3477.txt"
+    library_seqs_file: "data/ORI_A_library_2024-06-13_13_22_23.012484.csv"
+    all_samples:
+      - "A1_3d_yl"
+      - "A1_4d_yl"
+      - "A1before_yl"
+      - "A1_plate_yl-0n"
+      - "C1-4d"
+      - "C1-out"
+      - "C1-P"
+      - "c2-4d"
+      - "C2-out"
+      - "c2-P"
+    adapter_lengths: [21, 19]
+    zipf_figure_shape: [2, 2]
+    fit_samples:
+      - ["A1before_yl", "A1_plate_yl-0n"]
+    fit_model: true
+    sign_flips: [false]
+    reverse_complement: true
+
+  # ORI C models for NGS-NZ-3454
+  - name: "ORI_C_3454"
+    readcount_file: "data/NGS-NZ-3454.txt"
+    library_seqs_file: "data/ORI_C_library_2024-06-13_13_22_23.186347.csv"
+    all_samples:
+      - "A1-1W"
+      - "A1-3W"
+      - "A1-Out"
+      - "A2-1W"
+      - "A2-3W"
+      - "A2-Out"
+      - "C1-1W"
+      - "C1-3W"
+      - "C1-OUT"
+      - "C2-1W"
+      - "C2-3W"
+      - "C2-OUT"
+    adapter_lengths: [20, 20]
+    zipf_figure_shape: [2, 3]
+    fit_samples:
+      - ["C1-3W", "C1-OUT"]
+    fit_model: true
+    sign_flips: [true]
+    reverse_complement: false
+
+  # ORI C models for NGS-NZ-3477
+  - name: "ORI_C_3477"
+    readcount_file: "data/NGS-NZ-3477.txt"
+    library_seqs_file: "data/ORI_C_library_2024-06-13_13_22_23.186347.csv"
+    all_samples:
+      - "A1_3d_yl"
+      - "A1_4d_yl"
+      - "A1before_yl"
+      - "A1_plate_yl-0n"
+      - "C1-4d"
+      - "C1-out"
+      - "C1-P"
+      - "c2-4d"
+      - "C2-out"
+      - "c2-P"
+    adapter_lengths: [20, 20]
+    zipf_figure_shape: [2, 3]
+    fit_samples:
+      - ["C2-out", "c2-P"]
+      - ["c2-4d", "C2-out"]
+    fit_model: true
+    sign_flips: [false, true]
+    reverse_complement: false
+
+# Training parameters (can be overridden per model)
+training_params:
+  learning_rate: 1e-3
+  epochs: 500
+  batch_size: 1
+  early_stopping: true
+  early_stopping_patience: 2
+  min_read_threshold: 10
+  read_count_cutoff: 1000
+

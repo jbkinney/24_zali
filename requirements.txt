@@ -1,0 +1,7 @@
+mavenn
+logomaker
+numpy
+pandas
+matplotlib
+scipy
+jupyter

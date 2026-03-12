@@ -1,3 +1,4 @@
+[![DOI](https://zenodo.org/badge/1114583370.svg)](https://doi.org/10.5281/zenodo.18989567)
 # MPOS Analysis Code
 
 Computational analysis code for the Massively Parallel Origin Selection (MPOS) experiments in:
